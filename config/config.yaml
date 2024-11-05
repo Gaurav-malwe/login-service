@@ -5,5 +5,10 @@ MONGODB_DATABASE: "login-service"
 APP_NAME: "login-service"
 JWT_KEY: "5768e54bb7cba2d807f13cd3901c62ac2c240f3f"
 HOST: "http://localhost:3000"
-
+USER_POOL_ID: "my-login-service-user-pool-id",
+CLIENT_ID: "my-login-service-client-id"
+AWS_ACCESS_KEY_ID: test
+AWS_SECRET_ACCESS_KEY: test
+AWS_REGION: us-east-1
+AWS_ENDPOINT: http://localstack:4566
 

@@ -1,11 +1,10 @@
 package controller
 
 import (
-	"fmt"
+	"errors"
 	"net/http"
 
 	"github.com/Gaurav-malwe/login-service/internal/model"
-	"github.com/Gaurav-malwe/login-service/utils"
 	log "github.com/Gaurav-malwe/login-service/utils/logging"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -92,8 +91,7 @@ func validateRegisterUserRequest(ginCtx *gin.Context) (model.RegisterUserRequest
 	err = validate.Struct(payload)
 	if err != nil {
 		arr := listErrors(err)
-		// TODO: Error library
-		return payload, fmt.Errorf("%#v", utils.CustomErrorFields(utils.LS1001, ("Invalid/missing input parameters: "+arr)))
+		return payload, errors.New("Invalid/missing input parameters: " + arr)
 	}
 	return payload, nil
 }
@@ -112,8 +110,7 @@ func validateLoginRequest(ginCtx *gin.Context) (model.LoginRequest, error) {
 	err = validate.Struct(payload)
 	if err != nil {
 		arr := listErrors(err)
-		// TODO: Error library
-		return payload, fmt.Errorf("%#v", utils.CustomErrorFields(utils.LS1001, ("Invalid/missing input parameters: "+arr)))
+		return payload, errors.New("Invalid/missing input parameters: " + arr)
 	}
 	return payload, nil
 }

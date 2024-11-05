@@ -1,8 +1,10 @@
 package main
 
 import (
+	"context"
 	"net/http"
 
+	"github.com/Gaurav-malwe/login-service/cognitoClient"
 	"github.com/Gaurav-malwe/login-service/config"
 	"github.com/Gaurav-malwe/login-service/internal/controller"
 	"github.com/Gaurav-malwe/login-service/internal/service"
@@ -15,6 +17,9 @@ import (
 func main() {
 	cfg := config.GetConfig()
 
+	log := log.GetLogger(context.Background())
+	log.Debug("Service::RegisterUser")
+
 	// Intialize logging
 
 	// Intialize Root App
@@ -24,14 +29,19 @@ func main() {
 	mongoProvider := mongodb.New(mongodbConf)
 	err := mongoProvider.Init()
 	if err != nil {
-		log.DebugWithFields("MongoDB initialization failed", log.Fields{"error": err.Error()})
+		log.Debugf("MongoDB initialization failed", err)
 	}
-	log.Info("%s initialized", mongodbConf.AppName)
+	log.Infof("%s initialized", mongodbConf.AppName)
+
+	cognitoProvider, err := cognitoClient.NewCognitoClient()
+	if err != nil {
+		log.Fatal("Failed to initialize Cognito client", err)
+	}
 
 	// Router, ctl, repo, svc and Api server intialization
 	loginServiceAPIServer := router.NewLoginServiceAPIServer(mongoProvider)
 	repo := loginServiceAPIServer.Repository
-	svc := service.New(repo, cfg)
+	svc := service.New(repo, cognitoProvider, cfg)
 	ctl := controller.New(svc, cfg)
 
 	// Register handlers

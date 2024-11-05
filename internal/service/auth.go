@@ -8,7 +8,6 @@ import (
 	"github.com/Gaurav-malwe/login-service/internal/model"
 	log "github.com/Gaurav-malwe/login-service/utils/logging"
 	"github.com/golang-jwt/jwt/v4"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type IAuthService interface {
@@ -22,40 +21,52 @@ func (s *service) RegisterUser(ctx context.Context, userRequest *model.RegisterU
 	log := log.GetLogger(ctx)
 	log.Debug("Service::RegisterUser")
 
-	output := model.ToUserDetails(userRequest)
-
-	_, err := s.repo.GetUserByEmail(ctx, output.Email)
-	if err != nil && err == mongo.ErrNoDocuments {
-		err := output.SetPassword(output.Password)
-		if err != nil {
-			log.WithContext(ctx).WithFields(map[string]interface{}{
-				"error": err,
-			}).Error("Service::RegisterUser::Error while setting password")
-			return "", err
-		}
-
-		err = s.repo.InsertUser(ctx, output)
-		if err != nil {
-			log.WithContext(ctx).WithFields(map[string]interface{}{
-				"error": err,
-			}).Error("Service::RegisterUser::Error while inserting user")
-			return "", err
-		}
-
-		token, err := s.generateJWT(output)
-		if err != nil {
-			log.WithContext(ctx).WithFields(map[string]interface{}{
-				"error": err,
-			}).Error("Service::RegisterUser::Error while generating token")
-			return "", err
-		}
-
-		log.WithContext(ctx).Info("Service::RegisterUser::User registered successfully")
-		return token, nil
+	err := s.CognitoRegisterUser(userRequest.Username, userRequest.Password)
+	if err != nil {
+		log.WithContext(ctx).WithFields(map[string]interface{}{
+			"error": err,
+		}).Error("Service::RegisterUser::Error while registering user")
+		return "", err
 	}
 
-	log.WithContext(ctx).Info("Service::RegisterUser::User already exists")
-	return "", errors.New("user already exists")
+	// output := model.ToUserDetails(userRequest)
+
+	// _, err := s.repo.GetUserByEmail(ctx, output.Email)
+	// if err != nil && err == mongo.ErrNoDocuments {
+	// 	err := output.SetPassword(output.Password)
+	// 	if err != nil {
+	// 		log.WithContext(ctx).WithFields(map[string]interface{}{
+	// 			"error": err,
+	// 		}).Error("Service::RegisterUser::Error while setting password")
+	// 		return "", err
+	// 	}
+
+	// 	err = s.repo.InsertUser(ctx, output)
+	// 	if err != nil {
+	// 		log.WithContext(ctx).WithFields(map[string]interface{}{
+	// 			"error": err,
+	// 		}).Error("Service::RegisterUser::Error while inserting user")
+	// 		return "", err
+	// 	}
+
+	// 	// TODO: replace JWT with cognito
+
+	// 	token, err := s.generateJWT(output)
+	// 	if err != nil {
+	// 		log.WithContext(ctx).WithFields(map[string]interface{}{
+	// 			"error": err,
+	// 		}).Error("Service::RegisterUser::Error while generating token")
+	// 		return "", err
+	// 	}
+
+	// 	log.WithContext(ctx).Info("Service::RegisterUser::User registered successfully")
+	// 	return token, nil
+	// }
+
+	// log.WithContext(ctx).Info("Service::RegisterUser::User already exists")
+	// return "", errors.New("user already exists")
+
+	return "", nil
 
 }
 
@@ -63,25 +74,35 @@ func (s *service) LoginUser(ctx context.Context, loginRequest *model.LoginReques
 	log := log.GetLogger(ctx)
 	log.Debug("Service::LoginUser")
 
-	user, err := s.repo.GetUserByEmail(ctx, loginRequest.Email)
+	token, err := s.AuthenticateUser(loginRequest.Username, loginRequest.Password)
 	if err != nil {
-		log.WithContext(ctx).Info("Service::LoginUser::Invalid credentials")
+		log.WithContext(ctx).WithFields(map[string]interface{}{
+			"error": err,
+		}).Error("Service::LoginUser::Error while logging in user")
 		return "", err
 	}
 
-	err = user.CheckPassword(loginRequest.Password)
-	if err != nil {
-		log.WithContext(ctx).Info("Service::LoginUser::Invalid Username/Password")
-		return "", errors.New("invalid username/password")
-	}
+	// user, err := s.repo.GetUserByEmail(ctx, loginRequest.Email)
+	// if err != nil {
+	// 	log.WithContext(ctx).Info("Service::LoginUser::Invalid credentials")
+	// 	return "", err
+	// }
 
-	token, err := s.generateJWT(user)
-	if err != nil {
-		log.WithContext(ctx).Info("Service::LoginUser::Error while generating token")
-		return "", err
-	}
+	// // TODO: replace JWT with cognito
 
-	log.WithContext(ctx).Info("Service::LoginUser::User logged in successfully")
+	// err = user.CheckPassword(loginRequest.Password)
+	// if err != nil {
+	// 	log.WithContext(ctx).Info("Service::LoginUser::Invalid Username/Password")
+	// 	return "", errors.New("invalid username/password")
+	// }
+
+	// token, err := s.generateJWT(user)
+	// if err != nil {
+	// 	log.WithContext(ctx).Info("Service::LoginUser::Error while generating token")
+	// 	return "", err
+	// }
+
+	// log.WithContext(ctx).Info("Service::LoginUser::User logged in successfully")
 	return token, nil
 }
 

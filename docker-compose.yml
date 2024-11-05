@@ -1,0 +1,44 @@
+version: '3'
+services:
+  mongo:
+    image: mongo
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    restart: unless-stopped
+
+  app:
+    build: .
+    container_name: login-service
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongo
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017
+      - MONGODB_URL=mongodb://localhost:27017/
+      - MONGODB_DATABASE=login-service
+      - APP_NAME=login-service
+      - JWT_KEY=5768e54bb7cba2d807f13cd3901c62ac2c240f3f
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - AWS_REGION=us-east-1
+      - AWS_ENDPOINT=http://localstack:4566
+      
+  localstack:
+    image: localstack/localstack
+    container_name: localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=cognito
+      - DEFAULT_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+    volumes:
+      - "./localstack/init-scripts:/docker-entrypoint-initaws.d"
+
+volumes:
+  mongo-data:

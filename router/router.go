@@ -17,14 +17,12 @@ const (
 type LoginServer struct {
 	Repository repository.Repository
 	Router     *gin.Engine
-	// Cache      cache.Cache
 }
 
 func NewLoginServiceAPIServer(mongodbProvider *mongodb.MongoDB) *LoginServer {
 	server := new(LoginServer)
 	server.Repository = repository.New(mongodbProvider)
 	server.Router = gin.New()
-	// server.Cache = cache
 
 	// CORS middleware configuration
 	config := cors.New(cors.Config{
