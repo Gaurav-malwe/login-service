@@ -1,0 +1,9 @@
+stack: local
+MONGODB_URL: "mongodb://localhost:27017/"
+MONGODB_URI: "mongodb://localhost:27017/"
+MONGODB_DATABASE: "login-service"
+APP_NAME: "login-service"
+JWT_KEY: "5768e54bb7cba2d807f13cd3901c62ac2c240f3f"
+HOST: "http://localhost:3000"
+
+
