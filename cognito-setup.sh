@@ -25,3 +25,8 @@ CLIENT_ID=$(aws cognito-idp create-user-pool-client \
 
 echo "User Pool ID: $USER_POOL_ID"
 echo "Client ID: $CLIENT_ID"
+
+
+# Exporting them as environment variables for the application
+echo "export USER_POOL_ID=$USER_POOL_ID" >> /root/.bashrc
+echo "export CLIENT_ID=$CLIENT_ID" >> /root/.bashrc

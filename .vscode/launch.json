@@ -18,12 +18,13 @@
                 "APP_NAME": "login-service",
                 "JWT_KEY": "5768e54bb7cba2d807f13cd3901c62ac2c240f3f",
                 "HOST": "http://localhost:3000",
-                "USER_POOL_ID": "my-login-service-user-pool-id",
-                "CLIENT_ID": "my-login-service-client-id",
+                "USER_POOL_ID": "us-east-1_94182b9942bc4895b5c05af22da60002",
+                "CLIENT_ID": "4vgqpvzn0u1x8u8cxfncnvje59",
                 "AWS_ACCESS_KEY_ID": "test",
                 "AWS_SECRET_ACCESS_KEY": "test",
                 "AWS_REGION": "us-east-1",
                 "AWS_ENDPOINT": "http://localstack:4566",
+                "LOCALSTACK_AUTH_TOKEN": "ls-lAQEzOjo-4679-cUra-ToCU-QIQuqemU789a"
             },
             
         }

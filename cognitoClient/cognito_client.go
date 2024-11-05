@@ -1,20 +1,21 @@
 package cognitoClient
 
 import (
+	"github.com/Gaurav-malwe/login-service/config"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
 )
 
 type CognitoClient interface {
-	NewCognitoClient() (*cognitoidentityprovider.CognitoIdentityProvider, error)
+	NewCognitoClient(config *config.Config) (*cognitoidentityprovider.CognitoIdentityProvider, error)
 }
 
-func NewCognitoClient() (*cognitoidentityprovider.CognitoIdentityProvider, error) {
+func NewCognitoClient(config *config.Config) (*cognitoidentityprovider.CognitoIdentityProvider, error) {
 	// Set up AWS session with custom configuration for LocalStack
 	sess, err := session.NewSession(&aws.Config{
 		Region:   aws.String("us-east-1"),
-		Endpoint: aws.String("http://localhost:4566"), // LocalStack endpoint
+		Endpoint: aws.String(config.GetString("AWS_ENDPOINT")), // LocalStack endpoint
 	})
 	if err != nil {
 		return nil, err

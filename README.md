@@ -29,7 +29,7 @@ This project is a simple login service built with Go that integrates with AWS Co
 
     ```bash
     git clone https://github.com/Gaurav-malwe/login-service
-    cd my-login-service
+    cd login-service
     ```
 
 2. Build and run the service:
@@ -50,9 +50,13 @@ This document provides details about the API endpoints available in the Golang L
 - **Description**: This endpoint allows a new user to sign up for the service.
 - **Request Body**:
   {
-    "username": "exampleuser",
-    "password": "examplepassword"
-  }
+    "email": "<example@example.com>",
+    "password": "Password@123",
+    "username": "gaurav",
+    "full_name": "Gaurav Malwe",
+    "mobile": "8983878968",
+    "admin": true
+}
 - **Response**:
   - **Success**:
     - Status Code: `201 Created`
@@ -61,16 +65,6 @@ This document provides details about the API endpoints available in the Golang L
     ```json
       {
         "message": "User created successfully"
-      }
-    ```
-
-  - **Error**:
-    - Status Code: `400 Bad Request`
-    - Body:
-
-    ```json
-      {
-        "error": "Username already exists"
       }
     ```
 
@@ -95,7 +89,7 @@ This document provides details about the API endpoints available in the Golang L
     ```json
     {
     "message": "User signed in successfully",
-    "token": "your_jwt_token"
+    "token": "your_token"
     }
     ```
 

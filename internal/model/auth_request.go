@@ -21,6 +21,11 @@ type LoginRequest struct {
 	Password string `json:"password" validate:"required"`
 }
 
+type ConfirmRequest struct {
+	Username         string `json:"username" validate:"required"`
+	ConfirmationCode string `json:"confirmation_code" validate:"required"`
+}
+
 func ToUserDetails(req *RegisterUserRequest) *User {
 	return &User{
 		Email:     req.Email,

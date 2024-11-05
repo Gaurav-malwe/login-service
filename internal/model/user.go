@@ -10,7 +10,7 @@ import (
 type User struct {
 	UserId    string    `json:"user_id" bson:"_id,omitempty"`
 	Email     string    `json:"email" bson:"email"`
-	Password  string    `json:"password" bson:"password"`
+	Password  string    `json:"password" bson:"-"`
 	Username  string    `json:"username" bson:"username"`
 	Fullname  string    `json:"fullname" bson:"fullname"`
 	Mobile    string    `json:"mobile" bson:"mobile"`
@@ -30,15 +30,6 @@ type Claims struct {
 	Mobile   string `json:"mobile"`
 	Fullname string `json:"fullname"`
 	jwt.RegisteredClaims
-}
-
-func (u *User) SetPassword(password string) error {
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-	if err != nil {
-		return err
-	}
-	u.Password = string(hashedPassword)
-	return nil
 }
 
 func (u *User) CheckPassword(password string) error {

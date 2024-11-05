@@ -10,6 +10,7 @@ import (
 type ICognitoService interface {
 	CognitoRegisterUser(username, password string) error
 	AuthenticateUser(username, password string) (string, error)
+	CognitoConfirmUser(username, confirmationCode string) error
 }
 
 // RegisterUser registers a new user in Cognito User Pool
@@ -47,4 +48,15 @@ func (s *service) AuthenticateUser(username, password string) (string, error) {
 	}
 
 	return *resp.AuthenticationResult.IdToken, nil
+}
+
+func (s *service) CognitoConfirmUser(username, confirmationCode string) error {
+	input := &cognitoidentityprovider.ConfirmSignUpInput{
+		ClientId:         aws.String(os.Getenv("CLIENT_ID")),
+		Username:         aws.String(username),
+		ConfirmationCode: aws.String(confirmationCode),
+	}
+
+	_, err := s.cp.ConfirmSignUp(input)
+	return err
 }

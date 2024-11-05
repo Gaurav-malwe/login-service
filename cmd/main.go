@@ -33,7 +33,7 @@ func main() {
 	}
 	log.Infof("%s initialized", mongodbConf.AppName)
 
-	cognitoProvider, err := cognitoClient.NewCognitoClient()
+	cognitoProvider, err := cognitoClient.NewCognitoClient(cfg)
 	if err != nil {
 		log.Fatal("Failed to initialize Cognito client", err)
 	}

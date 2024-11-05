@@ -53,5 +53,6 @@ func (s *LoginServer) RegisterHandlers(c controller.Controller, middlewares ...g
 
 	group.POST("/signup", c.Register)
 	group.POST("/login", c.Login)
+	group.POST("/confirm", c.Confirm)
 
 }
