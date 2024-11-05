@@ -49,17 +49,42 @@ This document provides details about the API endpoints available in the Golang L
 - **Endpoint**: `POST /signup`
 - **Description**: This endpoint allows a new user to sign up for the service.
 - **Request Body**:
+
+  ```json
   {
-    "email": "<example@example.com>",
+    "email": "gsmalwe02@gmail.com",
     "password": "Password@123",
-    "username": "gaurav",
-    "full_name": "Gaurav Malwe",
+    "username": "gsmalwe02@gmail.com",
     "mobile": "8983878968",
     "admin": true
-}
+  }
+  ```
+
 - **Response**:
   - **Success**:
-    - Status Code: `201 Created`
+    - Status Code: `200`
+    - Body:
+
+    ```json
+      {
+        "message": "User created successfully"
+      }
+    ```
+
+- **Endpoint**: `POST /confirm`
+- **Description**: This endpoint allows a new user to confirm user registration.
+- **Request Body**:
+
+  ```json
+  { 
+    "username": "gaurav",
+    "confirmation_code": "123456"
+  }
+  ```
+
+- **Response**:
+  - **Success**:
+    - Status Code: `200`
     - Body:
 
     ```json
@@ -126,3 +151,4 @@ This project includes a Dockerfile and docker-compose.yml to facilitate building
 ## LocalStack Initialization
 
 The project uses LocalStack to simulate AWS services. The initialization script located in the localstack directory sets up the necessary resources (e.g., Cognito User Pool).
+Use the CLIENT_ID and USER_POOL_ID generated from the script while initializing service.

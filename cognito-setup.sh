@@ -11,6 +11,7 @@ USER_POOL_ID=$(aws cognito-idp create-user-pool \
   --pool-name login-service-user-pool \
   --query 'UserPool.Id' \
   --output text \
+  --region us-east-1 \
   --endpoint-url $ENDPOINT_URL)
 
 # Create Cognito User Pool Client
@@ -20,6 +21,7 @@ CLIENT_ID=$(aws cognito-idp create-user-pool-client \
   --generate-secret \
   --query 'UserPoolClient.ClientId' \
   --output text \
+  --region us-east-1 \
   --endpoint-url $ENDPOINT_URL)
 
 

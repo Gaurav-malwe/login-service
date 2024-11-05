@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	LS1001 = setErrorFields(http.StatusBadRequest, constants.AUTH_ERROR, "Auth Error")
+	LS1001 = setErrorFields(http.StatusUnauthorized, constants.AUTH_ERROR, "Auth Error")
 )
 
 func setErrorFields(httpStatus int, code string, errMessage string) map[string]interface{} {
